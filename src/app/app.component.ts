@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
+import { User } from './core/models/User.DTO.model';
+import { UserService } from './core/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -7,11 +9,19 @@ import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'archetype';
+  public users: User[] = [];
+  public title = 'archetype';
 
-  constructor(private primengConfig: PrimeNGConfig) {}
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
+    this.userService
+      .get()
+      .subscribe({ next: (res) => (this.users = res.data) });
+
     this.primengConfig.zIndex = {
       modal: 11000,
       overlay: 1000,
